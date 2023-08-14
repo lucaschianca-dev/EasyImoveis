@@ -69,4 +69,8 @@ public class Imovel {
     public void inativo() {
         this.ativo = false;
     }
+
+    public void ativo() {
+        this.ativo = true;
+    }
 }

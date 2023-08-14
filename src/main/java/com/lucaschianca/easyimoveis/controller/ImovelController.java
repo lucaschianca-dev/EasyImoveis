@@ -35,7 +35,7 @@ public class ImovelController {
 
     @GetMapping(value = "/all")
     public ResponseEntity<Page<DadosListagemImovel>> listaImoveis(@PageableDefault(size = 10, page = 0, sort = "nome") Pageable paginacao) {
-        var resultImoveis = imovelRepository.findAll(paginacao).map(DadosListagemImovel::new);
+        var resultImoveis = imovelRepository.findAllByAtivoTrue(paginacao).map(DadosListagemImovel::new);
         return ResponseEntity.ok(resultImoveis);
     }
 
@@ -66,6 +66,14 @@ public class ImovelController {
         var imovel = imovelRepository.getReferenceById(id);
         imovel.inativo();
 
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/active/{id}")
+    @Transactional
+    public ResponseEntity ativaImovel(@PathVariable Long id) {
+        var imovel = imovelRepository.getReferenceById(id);
+        imovel.ativo();
         return ResponseEntity.ok().build();
     }
 }
