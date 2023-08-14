@@ -66,7 +66,6 @@ public class Imovel {
                 this.numeroDeGaragem = dadosAtualizaImovel.numeroDeGaragem();
         }
     }
-
     public void inativo() {
         this.ativo = false;
     }
