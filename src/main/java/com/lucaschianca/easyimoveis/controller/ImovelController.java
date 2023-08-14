@@ -1,6 +1,7 @@
 package com.lucaschianca.easyimoveis.controller;
 
 import com.lucaschianca.easyimoveis.domain.entities.Imovel;
+import com.lucaschianca.easyimoveis.dto.DadosAtualizaImovel;
 import com.lucaschianca.easyimoveis.dto.DadosDetalhadosImovel;
 import com.lucaschianca.easyimoveis.dto.DadosImovel;
 import com.lucaschianca.easyimoveis.dto.DadosListagemImovel;
@@ -48,5 +49,23 @@ public class ImovelController {
     public ResponseEntity<Page<DadosListagemImovel>> listaImoveisSemPermuta(@PageableDefault(size = 10, page = 0, sort = "nome") Pageable paginacao) {
         var resultImoveis = imovelRepository.findAllByPermutaFalse(paginacao).map(DadosListagemImovel::new);
         return ResponseEntity.ok(resultImoveis);
+    }
+
+    @PutMapping(value = "/att")
+    @Transactional
+    public ResponseEntity atualizaImovel(@RequestBody @Valid DadosAtualizaImovel dadosAtualizaImovel) {
+        var resultAtualizaImovel = imovelRepository.getReferenceById(dadosAtualizaImovel.id());
+        resultAtualizaImovel.atualizaImovel(dadosAtualizaImovel);
+
+        return ResponseEntity.ok(new DadosDetalhadosImovel(resultAtualizaImovel));
+    }
+
+    @DeleteMapping(value = "/inactive/{id}")
+    @Transactional
+    public ResponseEntity inativaImovel(@PathVariable Long id) {
+        var imovel = imovelRepository.getReferenceById(id);
+        imovel.inativo();
+
+        return ResponseEntity.ok().build();
     }
 }
